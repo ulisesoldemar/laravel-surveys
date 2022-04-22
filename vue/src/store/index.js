@@ -52,7 +52,8 @@ const store = createStore({
             // Se recupera el token de autenticación para evitar
             // loggearse/registrarse de nuevo
             token: sessionStorage.getItem('TOKEN'),
-        }
+        },
+        surveys: [...tmpSurveys],
     },
     getters: {},
     actions: {

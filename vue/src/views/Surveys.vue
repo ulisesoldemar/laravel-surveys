@@ -19,10 +19,17 @@
         </router-link>
       </div>
     </template>
+    <div>
+      <pre>{{ surveys }}</pre>
+    </div>
   </PageComponent>
 </template>
 
 <script setup>
 import { PlusIcon } from "@heroicons/vue/solid";
+import { computed } from "vue";
+import store from "../store";
 import PageComponent from "../components/PageComponent.vue";
+
+const surveys = computed(() => store.state.surveys);
 </script>
