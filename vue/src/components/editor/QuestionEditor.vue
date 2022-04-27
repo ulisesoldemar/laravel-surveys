@@ -139,6 +139,89 @@
       ></textarea>
     </div>
     <!-- / Descripción de la pregunta -->
+
+    <!-- Datos -->
+    <div>
+      <div v-if="shouldHaveOptions()" class="mt-2">
+        <h4
+          class="text-sm font-semibold mb-1 flex justify-between items-center"
+        >
+          Options
+          <!-- Agregar nueva opción -->
+          <button
+            type="button"
+            @click="addOption()"
+            class="
+              flex
+              items-center
+              text-xs
+              px-2
+              py-1
+              rounded-sm
+              text-white
+              bg-gray-600
+              hover:bg-gray-700
+            "
+          >
+            <PlusIcon class="h-3 w-3" />
+            Add option
+          </button>
+          <!-- / Agregar nueva opción -->
+        </h4>
+        <div
+          v-if="!model.data.options.length"
+          class="text-xs text-gray-600 text-center py-2"
+        >
+          You don't have any question defined
+        </div>
+        <div>
+          <!-- Lista de opciones -->
+          <div
+            v-for="(option, index) in model.data.options"
+            :key="option.uuid"
+            class="flex items-center mb-1"
+          >
+            <span class="w-6 text-sm">{{ index + 1 }}</span>
+            <input
+              type="text"
+              v-model="option.text"
+              @change="dataChange"
+              class="
+                w-full
+                rounded-sm
+                px-2
+                py-1
+                text-xs
+                border border-gray-300
+                focus:border-indigo-500
+              "
+            />
+            <!-- Eliminar opción -->
+            <button
+              type="button"
+              @click="removeOption(option)"
+              class="
+                h-6
+                w-6
+                rounded-full
+                flex
+                items-center
+                justify-center
+                border border-transparent
+                transition-colors
+                hover:border-red-100
+              "
+            >
+              <TrashIcon class="h-3 w-3 text-red-500" />
+            </button>
+            <!-- / Eliminar opción -->
+          </div>
+          <!-- / Lista de opciones -->
+        </div>
+      </div>
+    </div>
+    <!-- / Datos -->
+
     <hr class="my-4" />
   </div>
 </template>
@@ -146,7 +229,9 @@
 <script setup>
 import { PlusIcon, TrashIcon } from "@heroicons/vue/solid";
 
-import { ref } from "@vue/reactivity";
+import { ref, computed } from "@vue/reactivity";
+import { v4 as uuidv4 } from "uuid";
+import store from "../../store";
 
 const props = defineProps({
   question: Object,
@@ -159,6 +244,68 @@ const emit = defineEmits(["change", "addQuestion", "deleteQuestion"]);
 // Se vuelve a crear todos los datos de la pregunta para evitar modificaciones
 // no intenciondas a la referencia
 const model = ref(JSON.parse(JSON.stringify(props.question)));
+
+// Se obtienen los tipos de preguntas desde vuex
+const questionTypes = computed(() => store.state.questionTypes);
+
+function upperCaseFirst(str) {
+  // Primera letra en mayúscula más el resto de la cadena
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function shouldHaveOptions() {
+  // Retorna true o false según contenga alguno de estos tipos de pregunta
+  return ["select", "radio", "checkbox"].includes(model.value.type);
+}
+
+function getOptions() {
+  return model.value.data.options;
+}
+
+function setOptions(options) {
+  model.value.data.options = options;
+}
+
+function addOption() {
+  // Se concatena un Objeto más a la lista de opciones mediante el
+  // operador spread (...)
+  setOptions([...getOptions(), { uuid: uuidv4(), text: "" }]);
+  dataChange();
+}
+
+function removeOption(op) {
+  setOptions(getOptions().filter((opt) => opt !== op));
+  dataChange();
+}
+
+function typeChange() {
+  if (shouldHaveOptions()) {
+    // De esta manera, se evita perder las opciones en la preguntas
+    // de tipo checkbox, radio y select si se cambia a otro tipo de
+    // pregunta
+    setOptions(getOptions() || []);
+  }
+  dataChange();
+}
+
+// Emite el cambio de datos
+function dataChange() {
+  // Se elimina la referencia original para evitar pérdida de datos
+  const data = JSON.parse(JSON.stringify(model.value));
+  if (!shouldHaveOptions()) {
+    delete data.data.options;
+  }
+
+  emit("change", data);
+}
+
+function addQuestion() {
+  emit("addQuestion", props.index + 1);
+}
+
+function deleteQuestion() {
+  emit("deleteQuestion", props.question);
+}
 </script>
 
 <style>
