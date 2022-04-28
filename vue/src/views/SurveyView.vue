@@ -260,13 +260,14 @@ import { PhotographIcon, PlusIcon } from "@heroicons/vue/solid";
 
 import { v4 as uuidv4 } from "uuid";
 import { ref } from "@vue/reactivity";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 
 import PageComponent from "../components/PageComponent.vue";
 import QuestionEditor from "../components/editor/QuestionEditor.vue";
 
 const route = useRoute();
+const router = useRouter();
 
 let model = ref({
   title: "",
@@ -309,6 +310,17 @@ function questionChange(question) {
       return JSON.parse(JSON.stringify(question));
     }
     return q;
+  });
+}
+/**
+ * Crea o actualiza un survey
+ */
+function saveSurvey() {
+  store.dispatch("saveSurvey", model.value).then(({ data }) => {
+    router.push({
+      name: "SurveView",
+      params: { id: data.data.id },
+    });
   });
 }
 </script>
