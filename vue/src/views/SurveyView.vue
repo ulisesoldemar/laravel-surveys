@@ -19,8 +19,8 @@
             </label>
             <div class="mt-1 flex items-center">
               <img
-                v-if="model.image"
-                :src="model.image"
+                v-if="model.image_url"
+                :src="model.image_url"
                 :alt="model.title"
                 class="w-64 h-48 object-cover"
               />
@@ -64,6 +64,7 @@
               >
                 <input
                   type="file"
+                  @change="onImageChoose"
                   class="
                     absolute
                     left-0
@@ -284,6 +285,18 @@ if (route.params.id) {
   );
 }
 
+function onImageChoose(e) {
+  const file = e.target.files[0];
+  const reader = FileReader();
+  reader.onLoad = () => {
+    // El campo que se envía al backend para aplicar validaciones
+    model.value.image = reader.result;
+    // El campo para visualizar en el frontend, en esta página
+    model.value.image_url = reader.result;
+  };
+  reader.readAsDataURL(file);
+}
+
 function addQuestion(index) {
   const newQuestion = {
     id: uuidv4(),
@@ -318,7 +331,7 @@ function questionChange(question) {
 function saveSurvey() {
   store.dispatch("saveSurvey", model.value).then(({ data }) => {
     router.push({
-      name: "SurveView",
+      name: "SurveyView",
       params: { id: data.data.id },
     });
   });
