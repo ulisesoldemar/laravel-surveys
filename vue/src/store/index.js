@@ -53,25 +53,44 @@ const store = createStore({
             // loggearse/registrarse de nuevo
             token: sessionStorage.getItem('TOKEN'),
         },
+        currentSurvey: {
+            loading: false,
+            data: {},
+        },
         surveys: [...tmpSurveys],
         questionTypes: ['text', 'select', 'radio', 'checkbox', 'textarea'],
     },
     getters: {},
     actions: {
+        async getSurvey({ commit }, id) {
+            commit('setCurrentSurveyLoading', true);
+            return axiosClient
+                .get(`/survey/${id}`)
+                .then((res) => {
+                    commit('setCurrentSurvey', res.data);
+                    commit('setCurrentSurveyLoading', false);
+                    return res;
+                })
+                .catch((err) => {
+                    commit('setCurrentSurveyLoading', false);
+                    throw err;
+                });
+        },
         saveSurvey({ commit }, survey) {
+            delete survey.image_url;
             let response;
             if (survey.id) {
                 // Si existe un id, se actualiza la survey
                 response = axiosClient
                     .put(`/survey/${survey.id}`, survey)
                     .then((res) => {
-                        commit('updateSurvey', res.data);
+                        commit('setCurrentSurvey', res.data);
                         return res;
                     });
             } else {
                 // Si no, se crea una nueva
                 response = axiosClient.post('/survey', survey).then((res) => {
-                    commit('saveSurvey', res.data);
+                    commit('setCurrentSurvey', res.data);
                     return res;
                 });
             }
@@ -101,17 +120,11 @@ const store = createStore({
 
     },
     mutations: {
-        saveSurvey: (state, survey) => {
-            // Se agrega la nueva survey al arreglo de surveys
-            state.surveys = [...state.surveys, survey.data];
+        setCurrentSurveyLoading: (state, loading) => {
+            state.currentSurvey.loading = loading;
         },
-        updateSurvey: (state, survey) => {
-            state.surveys = state.surveys.map((s) => {
-                if (s.id == survey.data.id) {
-                    return survey.data;
-                }
-                return s;
-            });
+        setCurrentSurvey: (state, survey) => {
+            state.currentSurvey.data = survey.data;
         },
         logout: (state) => {
             state.user.token = null;
