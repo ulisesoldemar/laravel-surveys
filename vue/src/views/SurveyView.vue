@@ -261,6 +261,7 @@ import { PhotographIcon, PlusIcon } from "@heroicons/vue/solid";
 
 import { v4 as uuidv4 } from "uuid";
 import { ref } from "@vue/reactivity";
+import { watch } from "@vue/runtime-core";
 import { useRoute, useRouter } from "vue-router";
 import store from "../store";
 
@@ -275,24 +276,37 @@ let model = ref({
   status: false,
   description: null,
   image: null,
+  image_url: null,
   expire_date: null,
   questions: [],
 });
 
+// Observar si los datos de la survey actual cambian y cuando esto pase
+// se actualiza el model local
+watch(
+  () => store.state.currentSurvey.data,
+  (newVal, oldVal) => {
+    model.value = {
+      // Se evitan cambios de referencia con los JSON
+      ...JSON.parse(JSON.stringify(newVal)),
+      status: newVal.status !== "draft",
+    };
+  }
+);
+
 if (route.params.id) {
-  model.value = store.state.surveys.find(
-    (s) => s.id === parseInt(route.params.id)
-  );
+  store.dispatch("getSurvey", route.params.id);
 }
 
 function onImageChoose(e) {
   const file = e.target.files[0];
-  const reader = FileReader();
-  reader.onLoad = () => {
+  const reader = new FileReader();
+  reader.onload = () => {
     // El campo que se envía al backend para aplicar validaciones
     model.value.image = reader.result;
-    // El campo para visualizar en el frontend, en esta página
+    // El campo que se muestra en la vista
     model.value.image_url = reader.result;
+    e.target.value = "";
   };
   reader.readAsDataURL(file);
 }
