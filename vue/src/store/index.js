@@ -58,6 +58,25 @@ const store = createStore({
     },
     getters: {},
     actions: {
+        saveSurvey({ commit }, survey) {
+            let response;
+            if (survey.id) {
+                // Si existe un id, se actualiza la survey
+                response = axiosClient
+                    .put(`/survey/${survey.id}`, survey)
+                    .then((res) => {
+                        commit('updateSurvey', res.data);
+                        return res;
+                    });
+            } else {
+                // Si no, se crea una nueva
+                response = axiosClient.post('/survey', survey).then((res) => {
+                    commit('saveSurvey', res.data);
+                    return res;
+                });
+            }
+            return response;
+        },
         async register({ commit }, user) {
             return axiosClient.post('/register', user)
                 .then(({ data }) => {
@@ -82,6 +101,18 @@ const store = createStore({
 
     },
     mutations: {
+        saveSurvey: (state, survey) => {
+            // Se agrega la nueva survey al arreglo de surveys
+            state.surveys = [...state.surveys, survey.data];
+        },
+        updateSurvey: (state, survey) => {
+            state.surveys = state.surveys.map((s) => {
+                if (s.id == survey.data.id) {
+                    return survey.data;
+                }
+                return s;
+            });
+        },
         logout: (state) => {
             state.user.token = null;
             state.user.data = {};
