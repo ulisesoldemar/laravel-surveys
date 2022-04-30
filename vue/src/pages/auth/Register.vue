@@ -31,7 +31,9 @@ const submitRegister = () => {
 <template>
     <BreezeGuestLayout>
         <BreezeValidationErrors class="mb-4" :errors="errors" />
-
+        <h2 class="mt-6 text-center font-extrabold text-gray-900">
+            Register for free
+        </h2>
         <form @submit.prevent="submitRegister">
             <div>
                 <BreezeLabel for="name" value="Name" />
