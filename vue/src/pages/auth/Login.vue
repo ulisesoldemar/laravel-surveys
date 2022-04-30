@@ -41,7 +41,18 @@ const submitLogin = () => {
         </div>
 
         <BreezeValidationErrors class="mb-4" :errors="errors" />
-
+        <h1 class="mt-6 text-center font-extrabold text-gray-900">
+            Sign in to your account
+        </h1>
+        <p class="mt-2 text-center text-sm text-gray-600">
+            Or
+            {{ ' ' }}
+            <router-link
+                to="/register"
+                class="font-medium text-indigo-600 hover:text-indigo-500">
+                register for free
+            </router-link>
+        </p>
         <form @submit.prevent="submitLogin">
             <div>
                 <BreezeLabel for="email" value="Email" />
