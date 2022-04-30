@@ -1,13 +1,30 @@
 <template>
     <BreezeAuthenticatedLayout>
         <template v-slot:header>
-            <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-                <!-- Si existe la survey, muestra el título de la misma, si no, "Create a survey" -->
-                {{ model.id ? model.title : 'Create a Survey' }}
-            </h2>
+            <div class="flex items-center justify-between">
+                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                    <!-- Si existe la survey, muestra el título de la misma, si no, "Create a survey" -->
+                    {{ route.params.id ? model.title : 'Create a Survey' }}
+                </h2>
+                <button
+                    v-if="route.params.id"
+                    type="button"
+                    @click="deleteSurvey()"
+                    class="
+                        px-3
+                        py-2
+                        text-white
+                        bg-red-500
+                        rounded-md
+                        hover:bg-red-600
+                    ">
+                    <TrashIcon class="w-5 h-5 -mt-1 inline-block" />
+                    Delete survey
+                </button>
+            </div>
         </template>
-        
-        <form @submit.prevent="saveSurvey">
+        <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
+        <form v-else @submit.prevent="saveSurvey">
             <div class="shadow sm:rounded-md sm:overflow-hidden">
                 <!--  Campos del formulario -->
                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
@@ -267,17 +284,18 @@
 <script setup>
 import BreezeAuthenticatedLayout from '@/layouts/Authenticated.vue'
 import QuestionEditor from '@/components/editor/QuestionEditor.vue'
-import { PhotographIcon, PlusIcon } from '@heroicons/vue/solid'
+import { PhotographIcon, PlusIcon, TrashIcon } from '@heroicons/vue/solid'
 
 import { v4 as uuidv4 } from 'uuid'
 import { ref } from '@vue/reactivity'
-import { watch } from '@vue/runtime-core'
+import { computed, watch } from '@vue/runtime-core'
 import { useRoute, useRouter } from 'vue-router'
 import { useSurveys } from '@/stores/surveys'
 
 const route = useRoute()
 const router = useRouter()
 const store = useSurveys()
+const surveyLoading = computed(() => store.currentSurvey.loading)
 
 let model = ref({
     title: '',
@@ -359,5 +377,19 @@ function saveSurvey() {
             params: { id: data.data.id },
         })
     })
+}
+
+function deleteSurvey() {
+    if (
+        confirm(
+            `Are you sure you want to delete this survey? Operation can't be undone.`,
+        )
+    ) {
+        store.deleteSurvey(model.value.id).then(() => {
+            router.push({
+                name: 'surveys'
+            })
+        })
+    }
 }
 </script>
