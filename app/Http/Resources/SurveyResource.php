@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Survey;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
 
@@ -25,7 +26,7 @@ class SurveyResource extends JsonResource
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
             'expire_date' => $this->expire_date,
-            'questions' => [],
+            'questions' => SurveyQuestionResource::collection($this->questions),
         ];
     }
 }
