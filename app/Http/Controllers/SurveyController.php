@@ -3,13 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Survey;
+use App\Models\SurveyQuestion;
 use App\Http\Requests\StoreSurveyRequest;
 use App\Http\Requests\UpdateSurveyRequest;
-use Illuminate\Http\Request;
 use App\Http\Resources\SurveyResource;
-use Exception;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Arr;
+use Illuminate\Validation\Rule;
+use Exception;
 
 class SurveyController extends Controller
 {
@@ -21,6 +25,7 @@ class SurveyController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
+
         return SurveyResource::collection(Survey::where('user_id', $user->id)->paginate());
     }
 
@@ -40,6 +45,12 @@ class SurveyController extends Controller
         }
 
         $survey = Survey::create($data);
+
+        // Crear preguntas
+        foreach ($data['questions'] as $question) {
+            $question['survey_id'] = $survey->id;
+            $this->createQuestion($question);
+        }
 
         return new SurveyResource($survey);
     }
@@ -85,6 +96,37 @@ class SurveyController extends Controller
 
         // Actualiza el survey en la base de datos
         $survey->update($data);
+
+        // Arreglo de preguntas existentes
+        $existingIds = $survey->questions()->pluck('id')->toArray();
+
+        // Arreglo de preguntas nuevas
+        $newIds = Arr::pluck($data['questions'], 'id');
+
+        // Encontrar preguntas a eliminar
+        $toDelete = array_diff($existingIds, $newIds);
+
+        // Encontrar preguntas a agregar
+        $toAdd = array_diff($newIds, $existingIds);
+
+        // Eliminar preguntas en el arreglo $toDelete
+        SurveyQuestion::destroy($toDelete);
+
+        // Crear nuevas preguntas
+        foreach ($data['questions'] as $question) {
+            if (in_array($question['id'], $toAdd)) {
+                $question['survey_id'] = $survey->id;
+                $this->createQuestion($question);
+            }
+        }
+
+        // Actualizar preguntas existentes
+        $questionMap = collect($data['questions'])->keyBy('id');
+        foreach ($survey->questions as $question) {
+            if (isset($questionMap[$question->id])) {
+                $this->updateQuestion($question, $questionMap[$question->id]);
+            }
+        }
         return new SurveyResource($survey);
     }
 
@@ -151,5 +193,52 @@ class SurveyController extends Controller
         file_put_contents($relativePath, data: $image);
 
         return $relativePath;
+    }
+
+    private function createQuestion($data)
+    {
+        // Vue mandar retornar un JSON, si llega un Array, se convierte en JSON
+        if (is_array($data['data'])) {
+            $data['data'] = json_encode($data['data']);
+        }
+        $validator = Validator::make($data, [
+            'question' => 'required|string',
+            'type' => ['required', Rule::in([
+                Survey::TYPE_TEXT,
+                Survey::TYPE_TEXTAREA,
+                Survey::TYPE_SELECT,
+                Survey::TYPE_RADIO,
+                Survey::TYPE_CHECKBOX,
+            ])],
+            'description' => 'nullable|string',
+            'data' => 'present',
+            'survey_id' => 'exists:App\Models\Survey,id'
+        ]);
+
+        return SurveyQuestion::create($validator->validated());
+    }
+
+    private function updateQuestion(SurveyQuestion $question, $data)
+    {
+        if (is_array($data['data'])) {
+            $data['data'] = json_encode($data['data']);
+        }
+
+        $validator = Validator::make($data, [
+            'id' => 'exists:App\Models\SurveyQuestion,id',
+            'question' => 'required|string',
+            'type' => ['required', Rule::in([
+                Survey::TYPE_TEXT,
+                Survey::TYPE_TEXTAREA,
+                Survey::TYPE_SELECT,
+                Survey::TYPE_RADIO,
+                Survey::TYPE_CHECKBOX,
+            ])],
+            'description' => 'nullable|string',
+            'data' => 'present',
+        ]);
+
+
+        return $question->update($validator->validated());
     }
 }
