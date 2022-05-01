@@ -15,7 +15,7 @@ export const useSurveys = defineStore('surveys', {
         },
         questionTypes: ['text', 'select', 'radio', 'checkbox', 'textarea'],
         notification: {
-            show: true,
+            show: false,
             type: null,
             message: null,
         },

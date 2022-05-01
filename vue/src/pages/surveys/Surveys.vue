@@ -33,9 +33,11 @@
                                 md:grid-cols-3
                             ">
                             <SurveyListItem
-                                v-for="survey in surveys"
+                                v-for="(survey, i) in surveys"
                                 :key="survey.id"
                                 :survey="survey"
+                                class="opacity-0 animate-fade-in-down"
+                                :style="{animationDelay: `${i * 0.1}s`}"
                                 @delete="deleteSurvey(survey)" />
                         </div>
                     </div>
