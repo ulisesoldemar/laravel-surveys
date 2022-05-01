@@ -372,6 +372,10 @@ function questionChange(question) {
  */
 function saveSurvey() {
     store.saveSurvey(model.value).then(({ data }) => {
+        store.notify({
+            type: 'success',
+            message: 'Survey was successfully updated',
+        })
         router.push({
             name: 'SurveyView',
             params: { id: data.data.id },
@@ -387,7 +391,7 @@ function deleteSurvey() {
     ) {
         store.deleteSurvey(model.value.id).then(() => {
             router.push({
-                name: 'surveys'
+                name: 'surveys',
             })
         })
     }
