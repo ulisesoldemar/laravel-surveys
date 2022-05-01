@@ -23,7 +23,21 @@
                 </button>
             </div>
         </template>
-        <div v-if="surveyLoading" class="flex justify-center">Loading...</div>
+        <div
+            v-if="surveyLoading"
+            class="flex items-center justify-center space-x-2">
+            <div
+                class="
+                    spinner-border
+                    animate-spin
+                    inline-block
+                    w-12
+                    h-12
+                    border-4
+                    rounded-full
+                "
+                role="status"></div>
+        </div>
         <form v-else @submit.prevent="saveSurvey" class="animate-fade-in-down">
             <div class="shadow sm:rounded-md sm:overflow-hidden">
                 <!--  Campos del formulario -->

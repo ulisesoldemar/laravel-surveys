@@ -11,6 +11,7 @@ export const useSurveys = defineStore('surveys', {
         },
         surveys: {
             loading: false,
+            links: [],
             data: [],
         },
         questionTypes: ['text', 'select', 'radio', 'checkbox', 'textarea'],
@@ -60,11 +61,13 @@ export const useSurveys = defineStore('surveys', {
         async deleteSurvey(id) {
             return axios.delete(`/api/survey/${id}`)
         },
-        async getSurveys() {
+        async getSurveys({ url = null } = {}) {
+            url = url || '/api/survey'
             this.surveys.loading = true
-            return axios.get('/api/survey').then(res => {
+            return axios.get(url).then(res => {
                 this.surveys.loading = false
                 this.surveys.data = res.data.data
+                this.surveys.links = res.data.meta.links
                 return res
             })
         },
