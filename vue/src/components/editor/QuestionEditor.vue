@@ -179,7 +179,7 @@
                 <div
                     v-if="!model.data.options.length"
                     class="text-xs text-gray-600 text-center py-2">
-                    You don't have any question defined
+                    You don't have any options defined
                 </div>
                 <div>
                     <!-- Lista de opciones -->
