@@ -42,30 +42,50 @@
                     <PencilIcon class="h-5 w-5 mr-2 inline-block" />
                     Edit
                 </router-link>
-                <button
-                    v-if="survey.id"
-                    type="button"
-                    @click="emit('delete', survey)"
-                    class="
-                        h-8
-                        w-8
-                        flex
-                        items-center
-                        justify-center
-                        rounded-full
-                        border border-transparent
-                        text-sm text-red-500
-                        focus:ring-2 focus:ring-offset-2 focus:ring-red-500
-                    ">
-                    <TrashIcon class="h-5 w-5 -mt-1 inline-block" />
-                </button>
+                <div class="flex items-center">
+                    <a
+                        :href="`/view/survey/${survey.slug}`"
+                        target="_blank"
+                        class="
+                            h-8
+                            w-8
+                            flex
+                            items-center
+                            justify-center
+                            rounded-full
+                            border border-transparent
+                            text-sm text-indigo-500
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-indigo-500
+                        ">
+                        <ExternalLinkIcon class="h-5 w-5" />
+                    </a>
+                    <button
+                        v-if="survey.id"
+                        type="button"
+                        @click="emit('delete', survey)"
+                        class="
+                            h-8
+                            w-8
+                            flex
+                            items-center
+                            justify-center
+                            rounded-full
+                            border border-transparent
+                            text-sm text-red-500
+                            focus:ring-2 focus:ring-offset-2 focus:ring-red-500
+                        ">
+                        <TrashIcon class="h-5 w-5 -mt-1 inline-block" />
+                    </button>
+                </div>
             </div>
         </div>
     </div>
 </template>
 
 <script setup>
-import { PencilIcon, TrashIcon } from '@heroicons/vue/solid'
+import { PencilIcon, TrashIcon, ExternalLinkIcon } from '@heroicons/vue/solid'
 
 const { survey } = defineProps({ survey: Object })
 
