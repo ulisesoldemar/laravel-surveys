@@ -22,3 +22,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::resource('/survey', SurveyController::class);
 });
 
+// Se busca en la bd el slug
+Route::get('/survey-by-slug/{survey:slug}', [SurveyController::class, 'showForGuest']);
+
+// Respuestas
+Route::post('/survey/{survey}/answer', [SurveyController::class, 'storeAnswer']);
