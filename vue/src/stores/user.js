@@ -67,7 +67,7 @@ export const useUsers = defineStore('users', {
                 .then(response => {
                     this.authStatus = response.status
                     processing.value = false
-
+                    this.userLogin.password = null
                     this.router.push({ name: 'dashboard' })
                 })
                 .catch(error => {
