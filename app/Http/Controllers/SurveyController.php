@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class SurveyController extends Controller
 {
@@ -25,11 +26,12 @@ class SurveyController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request $request)
+    public function index()
     {
-        $user = $request->user();
-
-        return SurveyResource::collection(Survey::where('user_id', $user->id)->paginate());
+        $surveys = Survey::with('questions')
+            ->where('user_id', Auth::id())
+            ->paginate();
+        return SurveyResource::collection($surveys);
     }
 
     /**
@@ -64,11 +66,9 @@ class SurveyController extends Controller
      * @param  \App\Models\Survey  $survey
      * @return \Illuminate\Http\Response
      */
-    public function show(Survey $survey, Request $request)
+    public function show(Survey $survey)
     {
-        $user = $request->user();
-
-        if ($user->id !== $survey->user_id) {
+        if (Auth::id() !== $survey->user_id) {
             return abort(403, 'Unauthorized action.');
         }
 
@@ -180,8 +180,7 @@ class SurveyController extends Controller
      */
     public function destroy(Survey $survey, Request $request)
     {
-        $user = $request->user();
-        if ($user->id !== $survey->user_id) {
+        if (Auth::id() !== $survey->user_id) {
             return abort(403, 'Unauthorized action.');
         }
         $survey->delete();
