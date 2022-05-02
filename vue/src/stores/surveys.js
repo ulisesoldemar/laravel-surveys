@@ -37,6 +37,23 @@ export const useSurveys = defineStore('surveys', {
                     throw err
                 })
         },
+        async getSurveyBySlug(slug) {
+            this.currentSurvey.loading = true
+            return axios
+                .get(`/api/survey-by-slug/${slug}`)
+                .then((res) => {
+                    this.currentSurvey = res.data
+                    this.currentSurvey.loading = false
+                    return res
+                })
+                .catch((err) => {
+                    this.currentSurvey.loading = false
+                    throw err
+                })
+        },
+        saveSurveyAnswer({ surveyId, answers }) {
+            return axios.post(`/api/survey/${surveyId}/answer`, { answers })
+        },
         async saveSurvey(survey) {
             await csrf()
             delete survey.image_url
