@@ -3,6 +3,7 @@ import { useUsers } from '@/stores/user'
 import Welcome from '@/pages/Welcome.vue'
 import Surveys from '@/pages/surveys/Surveys.vue'
 import SurveyView from '@/pages/surveys/SurveyView.vue'
+import SurveyPublicView from '@/pages/surveys/SurveyPublicView.vue'
 import PageNotFound from '@/pages/errors/404.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 import Login from '@/pages/auth/Login.vue'
@@ -80,6 +81,14 @@ const routes = [
             title: 'Create a survey',
             guard: 'auth',
         },   
+    },
+    {
+        path: '/view/survey/:slug',
+        name: 'SurveyPublicView',
+        component: SurveyPublicView,
+        meta: {
+            title: 'Survey',
+        },
     },
     {
         path: '/login',
