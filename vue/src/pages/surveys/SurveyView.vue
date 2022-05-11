@@ -331,7 +331,8 @@ watch(
         model.value = {
             // Se evitan cambios de referencia con los JSON
             ...JSON.parse(JSON.stringify(newVal.data)),
-            status: newVal.status !== 'draft',
+            status: newVal.data.status !== 'draft',
+            expire_date: new Date(newVal.data.expire_date).toISOString().slice(0, 10)
         }
     },
 )
