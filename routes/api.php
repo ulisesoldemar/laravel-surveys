@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,8 @@ Route::middleware('auth:sanctum')->group(function () {
         return $request->user();
     });
     Route::resource('/survey', SurveyController::class);
+    
+    Route::get('/dashboard', [DashboardController::class, 'index']);
 });
 
 // Se busca en la bd el slug
