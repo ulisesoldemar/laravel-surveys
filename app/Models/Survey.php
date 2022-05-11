@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use DateTime;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class Survey extends Model
 {
@@ -49,5 +51,20 @@ class Survey extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function createdAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => (new DateTime($value))->format('Y-m-d H:i:s')
+        );
+    }
+
+    // Implementados mutators
+    protected function updatedAt(): Attribute
+    {
+        return Attribute::make(
+            get: fn ($value) => (new DateTime($value))->format('Y-m-d H:i:s')
+        );
     }
 }
