@@ -30,7 +30,7 @@
               <div class="bg-white shadow-md p-3 text-center flex flex-col order-2 lg:order-4 animate-fade-in-down"
                 style="animation-delay: 0.2s;">
                 <h3 class="text-2xl font-semibold">Total answers</h3>
-                <div class="text-8xl font-semibold flex-1 flex items-center justify-center">{{ data.totalSurveys }}
+                <div class="text-8xl font-semibold flex-1 flex items-center justify-center">{{ data.totalAnswers }}
                 </div>
               </div>
               <div class="row-span-2 order-3 bg-white shadow-md p-4 lg:order-1 animate-fade-in-down">
@@ -38,12 +38,24 @@
                 <img :src="data.latestSurvey.image_url" :alt="data.latestSurvey.title" class="w-[240px] mx-auto" />
                 <h3 class="font-bold text-xl mb-3">{{ data.latestSurvey.title }}</h3>
                 <div class="flex justify-between text-sm mb-1">
-                  <div>Upload date:</div>
+                  <div>Create date:</div>
                   <div>{{ data.latestSurvey.created_at }}</div>
                 </div>
-                <div class="flex-justify-between text-sm mb-3">
+                <div class="flex justify-between text-sm mb-1">
+                  <div>Expire date:</div>
+                  <div>{{ data.latestSurvey.expire_date }}</div>
+                </div>
+                <div class="flex justify-between text-sm mb-1">
+                  <div>Status:</div>
+                  <div>{{ data.latestSurvey.status ? 'Active' : 'Draft' }}</div>
+                </div>
+                <div class="flex justify-between text-sm mb-1">
+                  <div>Questions:</div>
+                  <div>{{ data.latestSurvey.questions }}</div>
+                </div>
+                <div class="flex justify-between text-sm mb-3">
                   <div>Answers:</div>
-                  <div>{{ data.totalAnswers }}</div>
+                  <div>{{ data.latestSurvey.answers }}</div>
                 </div>
                 <div class="flex justify-between">
                   <router-link :to="{
@@ -88,8 +100,9 @@
                   <h3 class="text-2xl font-semibold">Latest answers</h3>
                   <a href="javascript:void(0)" class="text-sm text-blue-500 hover:decoration-blue-500">View all</a>
                 </div>
-                
-                <a href="#" v-for="answer of data.latestAnswers" :key="answer.id" class="block p-2 hover:bg-gray-100/90">
+
+                <a href="#" v-for="answer of data.latestAnswers" :key="answer.id"
+                  class="block p-2 hover:bg-gray-100/90">
                   <div class="font-semibold">{{ answer.survey.title }}</div>
                   <small>
                     Answer made at:
