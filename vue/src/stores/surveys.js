@@ -51,7 +51,8 @@ export const useSurveys = defineStore('surveys', {
                     throw err
                 })
         },
-        saveSurveyAnswer({ surveyId, answers }) {
+        async saveSurveyAnswer({ surveyId, answers }) {
+            await csrf()
             return axios.post(`/api/survey/${surveyId}/answer`, { answers })
         },
         async saveSurvey(survey) {

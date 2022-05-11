@@ -1,7 +1,5 @@
-import axios from '../lib/axios'
-import { defineStore, acceptHMRUpdate } from 'pinia'
-
-const csrf = () => axios.get('/sanctum/csrf-cookie')
+import axios from '../lib/axios';
+import { defineStore, acceptHMRUpdate } from 'pinia';
 
 export const useDashboard = defineStore('dashboard', {
     state: () => {
@@ -13,7 +11,6 @@ export const useDashboard = defineStore('dashboard', {
     getters: {},
     actions: {
         async getDashboardData() {
-            await csrf();
             this.loading = true;
             return axios.get(`/api/dashboard`)
                 .then((res) => {
@@ -30,5 +27,5 @@ export const useDashboard = defineStore('dashboard', {
 })
 
 if (import.meta.hot) {
-    import.meta.hot.accept(acceptHMRUpdate(useDashboard, import.meta.hot))
+    import.meta.hot.accept(acceptHMRUpdate(useDashboard, import.meta.hot));
 }
