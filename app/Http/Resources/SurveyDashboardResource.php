@@ -22,7 +22,7 @@ class SurveyDashboardResource extends JsonResource
             'title' => $this->title,
             'slug' => $this->slug,
             'status' => $this->status !== 'draft',
-            'created_at' => (new DateTime($this->created_at))->format('Y-m-d H:i:s'),
+            'created_at' => $this->created_at,
             'expire_date' => $this->expire_date,
             'questions' => $this->questions()->count(),
             'answers' => $this->answers()->count(),
