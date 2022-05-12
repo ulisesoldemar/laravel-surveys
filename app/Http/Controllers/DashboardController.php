@@ -11,11 +11,7 @@ class DashboardController extends Controller
 {
     public function index()
     {
-        $surveys =
-            Survey::with([
-                'answers' => fn ($query) =>
-                $query->orderBy('end_date', 'DESC')
-            ])
+        $surveys = Survey::with('answers')
             ->where('user_id', Auth::id())
             ->orderBy('created_at')
             ->get();
@@ -25,17 +21,20 @@ class DashboardController extends Controller
         // // Última survey
         $latest = $surveys->last();
 
-        $answers = $surveys->map(fn ($survey) => $survey->answers);
+        $answers = $surveys
+            ->map(fn ($survey) => $survey->answers)
+            ->flatten();
         // Total de respuestas
         $totalAnswers = $answers->count();
 
         // Últimas 5 respuestas
         $latestAnswers = $answers
-            ->take(5)
-            ->flatten(); // Se combinan los arrays de respuestas
+            ->sortByDesc('end_date')
+            ->values()
+            ->take(5); // Se combinan los arrays de respuestas
 
         return [
-            //'test' => $latestAnswers->flatten(),
+            // 'test' => $sortedAnswers,
             'totalSurveys' => $total,
             'latestSurvey' => $latest ? new SurveyDashboardResource($latest) : null,
             'totalAnswers' => $totalAnswers,
