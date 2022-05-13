@@ -24,6 +24,8 @@ axios.interceptors.response.use(
             router.push({ name: 'login' })
         } else if (error.response.status === 404) {
             router.push({ name: 'page-not-found' })
+        } else if (error.response.status === 403) {
+            router.push({ name: 'forbidden' })
         }
         throw error;
     })

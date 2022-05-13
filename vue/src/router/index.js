@@ -4,6 +4,8 @@ import Welcome from '@/pages/Welcome.vue'
 import Surveys from '@/pages/surveys/Surveys.vue'
 import SurveyView from '@/pages/surveys/SurveyView.vue'
 import SurveyPublicView from '@/pages/surveys/SurveyPublicView.vue'
+import AnswersView from '@/pages/answers/AnswersView.vue'
+import PageForbidden from '@/pages/errors/403.vue'
 import PageNotFound from '@/pages/errors/404.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 import Login from '@/pages/auth/Login.vue'
@@ -62,7 +64,7 @@ const routes = [
         meta: {
             title: 'Surveys',
             guard: 'auth',
-        },   
+        },
     },
     {
         path: '/surveys/:id',
@@ -71,7 +73,7 @@ const routes = [
         meta: {
             title: 'View survey',
             guard: 'auth',
-        },   
+        },
     },
     {
         path: '/surveys/create',
@@ -80,7 +82,7 @@ const routes = [
         meta: {
             title: 'Create a survey',
             guard: 'auth',
-        },   
+        },
     },
     {
         path: '/view/survey/:slug',
@@ -88,6 +90,15 @@ const routes = [
         component: SurveyPublicView,
         meta: {
             title: 'Survey',
+        },
+    },
+    {
+        path: '/answers/:id',
+        name: 'AnswersView',
+        component: AnswersView,
+        meta: {
+            title: 'Answers',
+            guard: 'auth',
         },
     },
     {
@@ -150,6 +161,14 @@ const routes = [
         component: PageNotFound,
         meta: {
             title: 'Page Not Found',
+        },
+    },
+    {
+        path: '/forbidden',
+        name: 'forbidden',
+        component: PageForbidden,
+        meta: {
+            title: 'Forbidden',
         },
     },
     {
