@@ -17,11 +17,11 @@ class SurveyQuestionAnswer extends Model
 
     public function questions()
     {
-        return $this->hasMany(SurveyQuestion::class);
+        return $this->hasMany(SurveyQuestion::class, 'id');
     }
 
     public function answers()
     {
-        return $this->hasMany(SurveyAnswer::class);
+        return $this->hasMany(SurveyAnswer::class, 'id');
     }
 }
