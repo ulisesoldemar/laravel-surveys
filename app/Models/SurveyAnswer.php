@@ -19,11 +19,14 @@ class SurveyAnswer extends Model
         'end_date'
     ];
 
-    protected $with = ['survey'];
-
     public function survey()
     {
         return $this->belongsTo(Survey::class);
+    }
+
+    public function questionAnswers()
+    {
+        return $this->belongsTo(SurveyQuestionAnswer::class, 'survey_answer_id');
     }
 
     // Implementado mutator
