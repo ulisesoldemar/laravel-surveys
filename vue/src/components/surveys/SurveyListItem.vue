@@ -42,6 +42,24 @@
                     <PencilIcon class="h-5 w-5 mr-2 inline-block" />
                     Edit
                 </router-link>
+                <router-link :to="{
+                    name: 'AnswersView',
+                    params: { id: survey.id },
+                  }" class="
+                    flex
+                    py-2
+                    px-4
+                    border border-transparent
+                    text-sm
+                    rounded-md
+                    text-indigo-500
+                    hover:bg-indigo-700
+                    hover:text-white
+                    transition-colors
+                    focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                    <EyeIcon class="h-5 w-5 mr-2 inline-block" />
+                    Answers
+                  </router-link>
                 <div class="flex items-center">
                     <a
                         :href="`/view/survey/${survey.slug}`"
@@ -85,7 +103,7 @@
 </template>
 
 <script setup>
-import { PencilIcon, TrashIcon, ExternalLinkIcon } from '@heroicons/vue/solid'
+import { PencilIcon, TrashIcon, EyeIcon, ExternalLinkIcon } from '@heroicons/vue/solid'
 
 const { survey } = defineProps({ survey: Object })
 

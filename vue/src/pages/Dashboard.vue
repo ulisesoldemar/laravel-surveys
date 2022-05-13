@@ -77,7 +77,10 @@
                     <PencilIcon class="h-5 w-5 mr-2 inline-block" />
                     Edit
                   </router-link>
-                  <button class="
+                  <router-link :to="{
+                    name: 'AnswersView',
+                    params: { id: data.latestSurvey.id },
+                  }" class="
                     flex
                     py-2
                     px-4
@@ -91,14 +94,13 @@
                     focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                     <EyeIcon class="h-5 w-5 mr-2 inline-block" />
                     View answers
-                  </button>
+                  </router-link>
                 </div>
               </div>
               <div class="bg-white shadow-md p-3 row-span-2 order-4 lg:order-3 animate-fade-in-down"
                 style="animation-delay: 0.3s;">
                 <div class="flex justify-between items-center mb-3 px-2">
                   <h3 class="text-2xl font-semibold">Latest answers</h3>
-                  <a href="javascript:void(0)" class="text-sm text-blue-500 hover:decoration-blue-500">View all</a>
                 </div>
 
                 <a href="#" v-for="answer of data.latestAnswers" :key="answer.id"
