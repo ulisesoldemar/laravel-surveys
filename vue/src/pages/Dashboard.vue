@@ -20,7 +20,7 @@
                 border-4
                 rounded-full" role="status"></div>
             </div>
-            <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-gray-700">
+            <div v-else-if="data.latestSurvey !== null" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 text-gray-700">
               <div class="bg-white shadow-md p-3 text-center flex flex-col order-1 lg:order-2 animate-fade-in-down"
                 style="animation-delay: 0.1s;">
                 <h3 class="text-2xl font-semibold">Total surveys</h3>
