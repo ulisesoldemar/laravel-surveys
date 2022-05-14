@@ -1,6 +1,7 @@
 import axios from '@/lib/axios'
 import { useStorage } from '@vueuse/core'
 import { defineStore, acceptHMRUpdate } from 'pinia'
+import { Buffer } from 'buffer'
 
 const csrf = () => axios.get('/sanctum/csrf-cookie')
 
@@ -140,7 +141,7 @@ export const useUsers = defineStore('users', {
                 .post('/reset-password', form.value)
                 .then(response => {
                     this.router.push(
-                        '/login?reset=' + buf.toString(response.data.status),
+                        '/login?reset=' + Buffer.from(response.data.status).toString('base64'),
                     )
                     processing.value = false
                 })
