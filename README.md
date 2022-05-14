@@ -1,4 +1,4 @@
-# Survey Full Stack Application
+# Survey SPA
 
 ## Requerimentos
 * PHP 8.0^
