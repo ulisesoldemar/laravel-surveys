@@ -9,6 +9,7 @@ export const useUsers = defineStore('users', {
         userLogin: useStorage('userLogin', {}),
         userData: useStorage('userData', []),
         authStatus: useStorage('authStatus', []),
+        provider: useStorage('provider'),
     }),
 
     getters: {
@@ -21,7 +22,7 @@ export const useUsers = defineStore('users', {
     },
 
     actions: {
-        getData() {
+        async getData() {
             axios
                 .get('/api/user')
                 .then(response => {
@@ -80,6 +81,35 @@ export const useUsers = defineStore('users', {
                 })
         },
 
+        async loginBySocial(provider) {
+            let response = axios
+                .get(`/api/authorize/${provider}/redirect`)
+                .then((response) => {
+                    this.provider = provider
+                    return response
+                })
+                .catch((error) => {
+                    throw error;
+                })
+            return response
+        },
+
+        async loginCallback(provider, code) {
+            axios
+                .get(`/api/authorize/${provider}/callback`, {
+                    params: { 'code': code }
+                })
+                .then((response) => {
+                    this.authStatus = response.status
+                    this.userLogin.password = null
+                    this.router.push({ name: 'dashboard' })
+                    this.provider = null
+                })
+                .catch(error => {
+                    throw error;
+                })
+        },
+
         async forgotPassword(form, setStatus, setErrors, processing) {
             await csrf()
 
@@ -110,7 +140,7 @@ export const useUsers = defineStore('users', {
                 .post('/reset-password', form.value)
                 .then(response => {
                     this.router.push(
-                        '/login?reset=' + btoa(response.data.status),
+                        '/login?reset=' + buf.toString(response.data.status),
                     )
                     processing.value = false
                 })
