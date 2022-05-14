@@ -9,6 +9,7 @@ import PageForbidden from '@/pages/errors/403.vue'
 import PageNotFound from '@/pages/errors/404.vue'
 import Dashboard from '@/pages/Dashboard.vue'
 import Login from '@/pages/auth/Login.vue'
+import LoginProvider from '@/pages/auth/LoginProvider.vue'
 import Register from '@/pages/auth/Register.vue'
 import ForgotPassword from '@/pages/auth/ForgotPassword.vue'
 import ResetPassword from '@/pages/auth/ResetPassword.vue'
@@ -119,6 +120,15 @@ const routes = [
         component: Register,
         meta: {
             title: 'Register',
+            guard: 'guest',
+        },
+    },
+    {
+        path: '/authorize/:provider/callback',
+        name: 'authorize',
+        component: LoginProvider,
+        meta: {
+            title: 'Login',
             guard: 'guest',
         },
     },
