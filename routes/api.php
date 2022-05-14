@@ -3,6 +3,7 @@
 use App\Http\Controllers\AnswerController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\Auth\OAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -33,3 +34,7 @@ Route::get('/survey-by-slug/{survey:slug}', [SurveyController::class, 'showForGu
 
 // Respuestas
 Route::post('/survey/{survey}/answer', [SurveyController::class, 'storeAnswer']);
+
+// Login mediante terceros
+Route::get('/authorize/{provider}/redirect', [OAuthController::class,'redirectToProvider']);
+Route::get('/authorize/{provider}/callback', [OAuthController::class,'handleProviderCallback']);
