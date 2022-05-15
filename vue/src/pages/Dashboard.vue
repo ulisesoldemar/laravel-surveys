@@ -95,6 +95,24 @@
                     <EyeIcon class="h-5 w-5 mr-2 inline-block" />
                     View answers
                   </router-link>
+                  <a
+                        :href="`/view/survey/${data.latestSurvey.slug}`"
+                        target="_blank"
+                        class="
+                            h-8
+                            w-8
+                            flex
+                            items-center
+                            justify-center
+                            rounded-full
+                            border border-transparent
+                            text-sm text-indigo-500
+                            focus:ring-2
+                            focus:ring-offset-2
+                            focus:ring-indigo-500
+                        ">
+                        <ExternalLinkIcon class="h-5 w-5" />
+                    </a>
                 </div>
               </div>
               <div class="bg-white shadow-md p-3 row-span-2 order-4 lg:order-3 animate-fade-in-down"
@@ -122,7 +140,7 @@
 
 <script setup>
 import BreezeAuthenticatedLayout from '@/layouts/Authenticated.vue'
-import { PencilIcon, EyeIcon } from '@heroicons/vue/solid';
+import { PencilIcon, EyeIcon, ExternalLinkIcon } from '@heroicons/vue/solid';
 import { computed } from '@vue/reactivity';
 import { useDashboard } from '../stores/dashboard';
 
