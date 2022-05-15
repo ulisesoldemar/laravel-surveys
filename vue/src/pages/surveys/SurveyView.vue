@@ -10,14 +10,7 @@
                     v-if="route.params.id"
                     type="button"
                     @click="deleteSurvey()"
-                    class="
-                        px-3
-                        py-2
-                        text-white
-                        bg-red-500
-                        rounded-md
-                        hover:bg-red-600
-                    ">
+                    class="px-3 py-2 text-white bg-red-500 rounded-md hover:bg-red-600">
                     <TrashIcon class="w-5 h-5 -mt-1 inline-block" />
                     Delete survey
                 </button>
@@ -27,15 +20,7 @@
             v-if="surveyLoading"
             class="flex items-center justify-center space-x-2">
             <div
-                class="
-                    spinner-border
-                    animate-spin
-                    inline-block
-                    w-12
-                    h-12
-                    border-4
-                    rounded-full
-                "
+                class="spinner-border animate-spin inline-block w-12 h-12 border-4 rounded-full"
                 role="status"></div>
         </div>
         <form v-else @submit.prevent="saveSurvey" class="animate-fade-in-down">
@@ -55,53 +40,17 @@
                                 class="w-64 h-48 object-cover" />
                             <span
                                 v-else
-                                class="
-                                    flex
-                                    items-center
-                                    justify-center
-                                    h-12
-                                    w-12
-                                    rounded-full
-                                    overflow-hidden
-                                    bg-gray-100
-                                ">
+                                class="flex items-center justify-center h-12 w-12 rounded-full overflow-hidden bg-gray-100">
                                 <PhotographIcon
                                     class="h-[80%] w-[80%] text-gray-300" />
                             </span>
                             <button
                                 type="button"
-                                class="
-                                    relative
-                                    overflow-hidden
-                                    ml-5
-                                    bg-white
-                                    py-2
-                                    px-3
-                                    border border-gray-300
-                                    rounded-md
-                                    shadow-sm
-                                    text-sm
-                                    leading-4
-                                    font-medium
-                                    text-gray-700
-                                    hover:bg-gray-50
-                                    focus:outline-none
-                                    focus:ring-2
-                                    focus:ring-offset-2
-                                    focus:ring-indigo-500
-                                ">
+                                class="relative overflow-hidden ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                                 <input
                                     type="file"
                                     @change="onImageChoose"
-                                    class="
-                                        absolute
-                                        left-0
-                                        top-0
-                                        right-0
-                                        bottom-0
-                                        opacity-0
-                                        cursor-pointer
-                                    " />
+                                    class="absolute left-0 top-0 right-0 bottom-0 opacity-0 cursor-pointer" />
                                 Change
                             </button>
                         </div>
@@ -121,16 +70,7 @@
                             id="title"
                             v-model="model.title"
                             autocomplete="survey_title"
-                            class="
-                                mt-1
-                                focus:ring-indigo-500 focus:border-indigo-500
-                                block
-                                w-full
-                                shadow-sm
-                                sm:text-sm
-                                border-gray-300
-                                rounded-md
-                            " />
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                     </div>
                     <!-- / Título -->
 
@@ -148,17 +88,7 @@
                                 rows="3"
                                 v-model="model.description"
                                 autocomplete="survey_description"
-                                class="
-                                    shadow-sm
-                                    focus:ring-indigo-500
-                                    focus:border-indigo-500
-                                    mt-1
-                                    block
-                                    w-full
-                                    sm:text-sm
-                                    border border-gray-300
-                                    rounded-md
-                                "
+                                class="shadow-sm focus:ring-indigo-500 focus:border-indigo-500 mt-1 block w-full sm:text-sm border border-gray-300 rounded-md"
                                 placeholder="Describe your survey"></textarea>
                         </div>
                     </div>
@@ -176,16 +106,7 @@
                             name="expire_date"
                             id="expire_date"
                             v-model="model.expire_date"
-                            class="
-                                mt-1
-                                focus:ring-indigo-500 focus:border-indigo-500
-                                block
-                                w-full
-                                shadow-sm
-                                sm:text-sm
-                                border-gray-300
-                                rounded-md
-                            " />
+                            class="mt-1 focus:ring-indigo-500 focus:border-indigo-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md" />
                     </div>
                     <!-- / Fecha de caducidad -->
 
@@ -197,14 +118,7 @@
                                 name="status"
                                 id="status"
                                 v-model="model.status"
-                                class="
-                                    focus:ring-indigo-500
-                                    h-4
-                                    w-4
-                                    text-indigo-600
-                                    border-gray-300
-                                    rounded
-                                " />
+                                class="focus:ring-indigo-500 h-4 w-4 text-indigo-600 border-gray-300 rounded" />
                         </div>
                         <div class="ml-3 text-sm">
                             <label
@@ -219,31 +133,15 @@
                 <!-- / Campos del formulario -->
 
                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
+                    <BreezeValidationErrors class="my-2" :errors="errors" />
                     <h3
-                        class="
-                            text-2xl
-                            font-semibold
-                            flex
-                            items-center
-                            justify-between
-                        ">
+                        class="text-2xl font-semibold flex items-center justify-between">
                         Questions
                         <!-- Agregar pregunta -->
                         <button
                             type="button"
                             @click="addQuestion()"
-                            class="
-                                flex
-                                justify-between
-                                items-center
-                                text-sm
-                                px-4
-                                py-1
-                                rounded-sm
-                                text-white
-                                bg-gray-600
-                                hover:bg-gray-700
-                            ">
+                            class="flex justify-between items-center text-sm px-4 py-1 rounded-sm text-white bg-gray-600 hover:bg-gray-700">
                             <PlusIcon class="h-4 w-4 -mt-1 inline-block" />
                             Add question
                         </button>
@@ -265,28 +163,10 @@
                             @deleteQuestion="deleteQuestion" />
                     </div>
                 </div>
-
                 <div class="px-4 py-3 bg-gray-50 text-right sm:px-6">
                     <button
                         type="submit"
-                        class="
-                            inline-flex
-                            justify-center
-                            py-2
-                            px-4
-                            border border-transparent
-                            shadow-sm
-                            text-sm
-                            font-medium
-                            rounded-md
-                            text-white
-                            bg-indigo-600
-                            hover:bg-indigo-700
-                            focus:outline-none
-                            focus:ring-2
-                            focus:ring-offset-2
-                            focus:ring-indigo-500
-                        ">
+                        class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Save
                     </button>
                 </div>
@@ -297,6 +177,7 @@
 
 <script setup>
 import BreezeAuthenticatedLayout from '@/layouts/Authenticated.vue'
+import BreezeValidationErrors from '@/components/ValidationErrors.vue'
 import QuestionEditor from '@/components/editor/QuestionEditor.vue'
 import { PhotographIcon, PlusIcon, TrashIcon } from '@heroicons/vue/solid'
 
@@ -310,6 +191,8 @@ const route = useRoute()
 const router = useRouter()
 const store = useSurveys()
 const surveyLoading = computed(() => store.currentSurvey.loading)
+const setErrors = ref()
+const errors = computed(() => setErrors.value)
 
 let model = ref({
     title: '',
@@ -332,7 +215,9 @@ watch(
             // Se evitan cambios de referencia con los JSON
             ...JSON.parse(JSON.stringify(newVal.data)),
             status: newVal.data.status !== 'draft',
-            expire_date: new Date(newVal.data.expire_date).toISOString().slice(0, 10)
+            expire_date: new Date(newVal.data.expire_date)
+                .toISOString()
+                .slice(0, 10),
         }
     },
 )
@@ -386,16 +271,23 @@ function questionChange(question) {
  * Crea o actualiza un survey
  */
 function saveSurvey() {
-    store.saveSurvey(model.value).then(({ data }) => {
-        store.notify({
-            type: 'success',
-            message: 'Survey was successfully updated',
+    store
+        .saveSurvey(model.value)
+        .then(({ data }) => {
+            store.notify({
+                type: 'success',
+                message: 'Survey was successfully updated',
+            })
+            router.push({
+                name: 'SurveyView',
+                params: { id: data.data.id },
+            })
+						setErrors.value = {}
         })
-        router.push({
-            name: 'SurveyView',
-            params: { id: data.data.id },
+        .catch(error => {
+            console.log(error.response.data.errors)
+            setErrors.value = error.response.data.errors
         })
-    })
 }
 
 function deleteSurvey() {
