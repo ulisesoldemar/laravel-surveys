@@ -18,6 +18,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Validation\Rule;
 use Exception;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class SurveyController extends Controller
 {
@@ -68,10 +69,7 @@ class SurveyController extends Controller
      */
     public function show(Survey $survey)
     {
-        if (Auth::id() !== $survey->user_id) {
-            return abort(403, 'Unauthorized action.');
-        }
-
+        Gate::denyIf(fn () => Auth::id() !== $survey->user_id, 'Unauthorized action.', 403);
         return new SurveyResource($survey);
     }
 
@@ -180,9 +178,7 @@ class SurveyController extends Controller
      */
     public function destroy(Survey $survey, Request $request)
     {
-        if (Auth::id() !== $survey->user_id) {
-            return abort(403, 'Unauthorized action.');
-        }
+        Gate::denyIf(fn () => Auth::id() !== $survey->user_id, 'Unauthorized action.', 403);
         $survey->delete();
         // Si hay una imagen vieja, se elimina del storage luego de eliminarse
         // de la bd

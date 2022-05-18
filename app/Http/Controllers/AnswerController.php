@@ -9,6 +9,7 @@ use App\Models\SurveyQuestion;
 use App\Models\SurveyQuestionAnswer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class AnswerController extends Controller
 {
@@ -42,9 +43,7 @@ class AnswerController extends Controller
     public function show(Survey $survey)
     {
 
-        if (Auth::id() !== $survey->user_id) {
-            return abort(403, 'Unauthorized action.');
-        }
+        Gate::denyIf(fn () => Auth::id() !== $survey->user_id, 'Unauthorized action.', 403);
 
         $questions = SurveyQuestion::where('survey_id', $survey->id)->get(['id', 'question', 'type']);
         $questionIds = $questions->map(fn ($question) => $question->id);
